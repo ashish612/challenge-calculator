@@ -9,6 +9,7 @@ namespace Tests
         [Test]
         [TestCase("3,4", 7)]
         [TestCase("10,9", 19)]
+        [TestCase("1,2,3,test,mock,4",10)]
         public void ShouldReturnSumOfCommaSeparatedNumbers(string input, int actualResult)
         {
             var adder = new Adder(new char[] { ',' });
@@ -27,6 +28,8 @@ namespace Tests
             Assert.AreEqual(actualResult, expectedResult);
         }
 
+        //feature - allow more than 2 number sum.
+        [Ignore("Feature - allow 2 number invalidates the test case.")]
         [Test]
         [TestCase("7,4,2")]
         [TestCase("6,Ashish,4,1")]
