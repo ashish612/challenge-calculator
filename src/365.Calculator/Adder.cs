@@ -1,4 +1,7 @@
-﻿using System;
+using _365.Calculator.Utility;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace _365.Calculator
 {
@@ -14,17 +17,24 @@ namespace _365.Calculator
         {
             var operands = input.Split(_delimiters, StringSplitOptions.RemoveEmptyEntries);
 
+            var negativeValues = FindNegativeValues(operands);
+
+            if (negativeValues.Count > 0)
+                throw new Exception(string.Format("Negative numbers denied. {0}", string.Join(",", negativeValues)));
+
             //feature-allow summing more than 2 numbers.
             //if (operands.Length > 2)
             //  throw new Exception("Invalid Arguments. You can sum upto 2 numbers only.");
 
-            var total = 0;
-            foreach (var operand in operands)
-            {
-                if (int.TryParse(operand, out int validNumber))
-                    total += validNumber;
-            }
-            return total;
-        }        
+            return operands
+                    .ValidNumbers()
+                    .Sum(o=>o);            
+        }
+
+        private List<int> FindNegativeValues(string[] operands)
+        => operands
+            .ValidNumbers()
+            .Where(o=>o<0)
+            .ToList();
     }
 }

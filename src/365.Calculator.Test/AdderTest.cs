@@ -6,21 +6,22 @@ namespace _365.Calculator.Tests
     public class AdderTest
     {
         private string[] delimiters;
+        private Adder adder;
 
         [SetUp]
         public void BeforeAdderTests()
         {
             delimiters = new string[] { ",", "\r\n" };
+            adder = new Adder(delimiters);
         }
 
         [Test]
         [TestCase("3,4", 7)]
         [TestCase("10,9", 19)]
         [TestCase("1,2,3,test,mock,4",10)]
-        public void ShouldReturnSumOfCommaSeparatedNumbers(string input, int actualResult)
+        public void ShouldReturnSumOfCommaSeparatedNumbers(string input, int expectedResult)
         {
-            var adder = new Adder(delimiters);
-            var expectedResult = adder.TryAdd(input);
+            var actualResult = adder.TryAdd(input);
             Assert.AreEqual(actualResult, expectedResult);
         }
 
@@ -28,10 +29,9 @@ namespace _365.Calculator.Tests
         [TestCase("7,", 7)]
         [TestCase("", 0)]
         [TestCase("6,Ashish", 6)]
-        public void ShouldIgnoreTextOrEmptyValueAndSumNumbers(string input, int actualResult)
+        public void ShouldIgnoreTextOrEmptyValueAndSumNumbers(string input, int expectedResult)
         {
-            var adder = new Adder(delimiters);
-            var expectedResult = adder.TryAdd(input);
+            var actualResult = adder.TryAdd(input);
             Assert.AreEqual(actualResult, expectedResult);
         }
 
@@ -42,18 +42,33 @@ namespace _365.Calculator.Tests
         [TestCase("6,Ashish,4,1")]
         public void ShouldAllowSumOfMaximumTwoNumbers(string input)
         {
-            var adder = new Adder(delimiters);
             Assert.Throws<Exception>(() => adder.TryAdd(input));
         }
 
         [Test]
         [TestCase("1\r\n2,3",6)]
         [TestCase("4\r\n2\r\n11,3", 20)]
-        public void ShouldGiveCorrectSumWithAltNewLineDelimiter(string input, int actualResult)
+        public void ShouldGiveCorrectSumWithAltNewLineDelimiter(string input, int expectedResult)
         {
-            var adder = new Adder(delimiters);
-            var expectedResult = adder.TryAdd(input);
+            var actualResult = adder.TryAdd(input);
             Assert.AreEqual(actualResult, expectedResult);
         }
+
+        [Test]
+        [TestCase("3\r\n2,-1")]
+        [TestCase("-5")]
+        public void ShouldThrowExceptionWhenInputHasNegativeNumbers(string input)
+        {
+            Assert.Throws<Exception>(() => adder.TryAdd(input));
+        }
+
+        [Test]
+        [TestCase("-3\r\n2,-1")]        
+        public void ShouldReturnNegativeNumbersWithExceptionWhenInputHasNegativeNumbers(string input)
+        {
+            Assert.That(() => adder.TryAdd(input),
+            Throws.TypeOf<Exception>().With.Message
+            .EqualTo("Negative numbers denied. -3,-1"));
+        }        
     }
 }
