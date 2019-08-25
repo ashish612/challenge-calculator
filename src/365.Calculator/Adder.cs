@@ -1,4 +1,4 @@
-﻿using _365.Calculator.Utility;
+using _365.Calculator.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
