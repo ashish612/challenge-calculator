@@ -10,11 +10,10 @@ namespace _365.Calculator
 
             var input = Console.ReadLine();
 
-            var adder = new Adder(new char[] { ',' });
-            var sum = 0;
             try
             {
-                sum = adder.TryAdd(input);
+                var adder = new Adder(new char[] { ',' });
+                var sum = adder.TryAdd(input);
                 Console.WriteLine(string.Format("Total value of numbers : {0}", sum));
             }
             catch (Exception e)

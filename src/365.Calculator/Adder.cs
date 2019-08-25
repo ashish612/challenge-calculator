@@ -16,8 +16,9 @@ namespace _365.Calculator
         {
             var operands = input.Split(_delimiters);
 
-            if (operands.Length > 2)
-                throw new Exception("Invalid Arguments. You can sum upto 2 numbers only.");
+            //feature-allow summing more than 2 numbers.
+            //if (operands.Length > 2)
+                //  throw new Exception("Invalid Arguments. You can sum upto 2 numbers only.");
 
             var total = 0;
             foreach (var operand in operands)
