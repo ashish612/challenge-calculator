@@ -6,4 +6,10 @@
     <RootNamespace>_365.Calculator</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Utility\**" />
+    <EmbeddedResource Remove="Utility\**" />
+    <None Remove="Utility\**" />
+  </ItemGroup>
+
 </Project>
