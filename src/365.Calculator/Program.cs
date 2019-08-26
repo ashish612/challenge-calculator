@@ -1,19 +1,28 @@
-﻿using System;
+﻿using _365.Calculator.Builders;
+using System;
 using System.Text;
 
 namespace _365.Calculator
 {
+
+    
     class Program
     {
         static void Main(string[] args)
-        {
-            Console.WriteLine("Provide an input separating either by a comma(,) or a new line. Press S to stop. ");
-
+        {            
             try
             {
-                var input = GetInputValues();
-                var adder = new Adder(new string[] { "," ,"\n"});
-                var sum = adder.TryAdd(input);
+                var delimiters = GetDelimiters();
+                var input = GetInput();
+
+                var sum = CalculatorBuilder                            
+                            .With(input)
+                            .And(delimiters)
+                            .ValidNumbers()
+                            .FilterOutNegative()
+                            .FilterGreaterThan(1000)
+                            .Sum();                
+
                 Console.WriteLine(string.Format("Sum : {0}", sum));
             }
             catch (Exception e)
@@ -24,9 +33,13 @@ namespace _365.Calculator
             Console.ReadLine();
         }
 
-        private static string GetInputValues()
+        private static Delimiter GetDelimiters()
+        =>new Delimiter(new string[] { ",", "\n" });                        
+        
+
+        private static string GetInput()
         {
-            
+            Console.WriteLine("Provide an input. Press S to stop. ");
             var rawInput = new StringBuilder();
             
             while (true)
