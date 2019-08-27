@@ -3,17 +3,11 @@ using System.Collections.Generic;
 
 namespace _365.Calculator
 {
-    public class Delimiter
+    public class Delimiters
     {
         private List<string> _delimiters;
-        public IEnumerable<string> Values
-        {
-            get
-            {
-                return _delimiters;
-            }
-        }
-        public Delimiter(string[] delimiters)
+        
+        public Delimiters(string[] delimiters)
         {
             _delimiters = new List<string>();
             foreach (var delimiter in delimiters)            

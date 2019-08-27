@@ -7,7 +7,7 @@ namespace _365.Calculator.Builders
 
     public class CalculatorBuilder : IDelimiter, IValidNumber, IFilterNegatives, IFilterNumbers
     {
-        private Delimiter _delimiter;
+        private Delimiters _delimiter;
         private static string rawInput;
         private string[] inputArray;
         private List<int> validNumbers;
@@ -22,7 +22,7 @@ namespace _365.Calculator.Builders
             return new CalculatorBuilder();
         }
 
-        public IValidNumber And(Delimiter delimiter)
+        public IValidNumber And(Delimiters delimiter)
         {
             _delimiter = delimiter;
             inputArray = _delimiter.Split(rawInput);

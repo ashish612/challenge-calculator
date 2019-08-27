@@ -2,7 +2,7 @@
 {
     public interface IDelimiter
     {
-        IValidNumber And(Delimiter delimiter);
+        IValidNumber And(Delimiters delimiter);
     }
 
 

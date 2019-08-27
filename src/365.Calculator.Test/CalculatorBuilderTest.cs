@@ -6,13 +6,13 @@ namespace _365.Calculator.Test
 {
     public class CalculatorBuilderTest
     {
-        private Delimiter delimiter;
+        private Delimiters delimiter;
 
         [SetUp]
         public void BeforeAdderTests()
         {
             var delimiters = new string[] { ",", "\r\n" };
-            delimiter = new Delimiter(delimiters);
+            delimiter = new Delimiters(delimiters);
         }
 
 

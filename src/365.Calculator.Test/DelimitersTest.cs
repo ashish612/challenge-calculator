@@ -1,18 +1,15 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace _365.Calculator.Test
 {
-    public class DelimiterTest
+    public class DelimitersTest
     {        
         [Test]
         public void ShouldSplitInputBasedOnDelimiters()
         {
             var input = "3,4,Ashish,1";
             var expectedResult = new string[] {"3","4","Ashish","1"};
-            var delimiters = new Delimiter(new string[] { "," });
+            var delimiters = new Delimiters(new string[] { "," });
             var actualResult = delimiters.Split(input);
 
             Assert.AreEqual(expectedResult, actualResult);
@@ -24,7 +21,7 @@ namespace _365.Calculator.Test
         [TestCase("~")]
         public void ShouldAllowAddingNewSingleCharacterDelimiter(string input)
         {
-            var delimiters = new Delimiter(new string[] { });
+            var delimiters = new Delimiters(new string[] { });
             var isSuccess = delimiters.TryAdd(input);
             Assert.AreEqual(isSuccess, true);
         }
@@ -35,7 +32,7 @@ namespace _365.Calculator.Test
         [TestCase("")]
         public void ShouldNotAllowAddingEmptyOrNewMultiCharacterDelimiter(string input)
         {
-            var delimiters = new Delimiter(new string[] { });
+            var delimiters = new Delimiters(new string[] { });
             var isSuccess = delimiters.TryAdd(input);
             Assert.AreEqual(isSuccess, false);
         }

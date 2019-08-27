@@ -4,8 +4,6 @@ using System.Text;
 
 namespace _365.Calculator
 {
-
-    
     class Program
     {
         static void Main(string[] args)
@@ -41,9 +39,9 @@ namespace _365.Calculator
             Console.WriteLine();
         }
 
-        private static Delimiter GetDelimiters()
+        private static Delimiters GetDelimiters()
         {
-            var delimiters = new Delimiter(new string[] { ",", "\n" });
+            var delimiters = new Delimiters(new string[] { ",", "\r\n" });
 
             Console.WriteLine("Press Y for to add a custom delimiter or N to skip.");
             var prompt = Console.ReadLine();
