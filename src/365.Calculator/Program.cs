@@ -9,7 +9,8 @@ namespace _365.Calculator
     class Program
     {
         static void Main(string[] args)
-        {            
+        {
+            ShowBanner();
             try
             {
                 var delimiters = GetDelimiters();
@@ -33,9 +34,33 @@ namespace _365.Calculator
             Console.ReadLine();
         }
 
+        private static void ShowBanner()
+        {
+            Console.WriteLine("Restaurant365 Code Challenge - String Calculator");
+            Console.WriteLine("================================================");
+            Console.WriteLine();
+        }
+
         private static Delimiter GetDelimiters()
-        =>new Delimiter(new string[] { ",", "\n" });                        
-        
+        {
+            var delimiters = new Delimiter(new string[] { ",", "\n" });
+
+            Console.WriteLine("Press Y for to add a custom delimiter or N to skip.");
+            var prompt = Console.ReadLine();
+            if (string.Compare(prompt, "N", true) == 0 || string.Compare(prompt, "", true) == 0)
+                return delimiters;
+
+            var isAdded = false;
+            while (!isAdded)
+            {
+                Console.WriteLine("Please enter a single character custom delimiter: ");
+                var input = Console.ReadLine();
+                isAdded = delimiters.TryAdd(input);
+                if (!isAdded)
+                    Console.WriteLine("Invalid Character.");
+            }
+            return delimiters;
+        }
 
         private static string GetInput()
         {
