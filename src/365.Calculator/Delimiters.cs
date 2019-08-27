@@ -1,32 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace _365.Calculator
 {
     public class Delimiters
     {
-        private List<string> _delimiters;
+        private List<Delimiter> _delimiters;
         
-        public Delimiters(string[] delimiters)
+        public Delimiters(List<Delimiter> delimiters)
         {
-            _delimiters = new List<string>();
-            foreach (var delimiter in delimiters)            
-                _delimiters.Add(delimiter);            
+            _delimiters = delimiters;
         }
 
-        public string[] Split(string input)        
-            => input.Split(_delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries);
-
-        public bool TryAdd(string newCharacter)
-        {
-            if (newCharacter.Length == 1)
-            {
-                _delimiters.Add(newCharacter);
-                return true;
-            }
-            return false;
+        public string[] Split(string input)
+        {            
+            foreach (var delimiter in _delimiters)                            
+                input = delimiter.Collapse(input);                
+            
+            return input.Split(_delimiters.Select(d=>d.Character).ToArray());
         }
 
+        public void Add(Delimiter newDelimiter)
+        {                       
+            _delimiters.Add(newDelimiter);
+        }
+
+        public int NumOfDelimiters() => _delimiters.Count();
     }
 
 }

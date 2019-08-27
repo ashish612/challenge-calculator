@@ -1,6 +1,7 @@
 ﻿using _365.Calculator.Builders;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace _365.Calculator.Test
 {
@@ -11,7 +12,7 @@ namespace _365.Calculator.Test
         [SetUp]
         public void BeforeAdderTests()
         {
-            var delimiters = new string[] { ",", "\r\n" };
+            var delimiters = new List<Delimiter> { new Delimiter(',',false), new Delimiter('\n',false) };
             delimiter = new Delimiters(delimiters);
         }
 

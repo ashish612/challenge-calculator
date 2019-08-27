@@ -1,26 +1,29 @@
 ﻿using _365.Calculator.Builders;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace _365.Calculator
 {
     class Program
     {
+        private static bool _canceled = false;
         static void Main(string[] args)
         {
             ShowBanner();
             try
             {
                 var delimiters = GetDelimiters();
+
                 var input = GetInput();
 
-                var sum = CalculatorBuilder                            
+                var sum = CalculatorBuilder
                             .With(input)
                             .And(delimiters)
                             .ValidNumbers()
                             .FilterOutNegative()
                             .FilterGreaterThan(1000)
-                            .Sum();                
+                            .Sum();
 
                 Console.WriteLine(string.Format("Sum : {0}", sum));
             }
@@ -28,8 +31,12 @@ namespace _365.Calculator
             {
                 Console.WriteLine(e.Message);
             }
+        }
 
-            Console.ReadLine();
+        private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        {
+            if (e.SpecialKey == ConsoleSpecialKey.ControlC)                
+                _canceled = true;
         }
 
         private static void ShowBanner()
@@ -41,28 +48,65 @@ namespace _365.Calculator
 
         private static Delimiters GetDelimiters()
         {
-            var delimiters = new Delimiters(new string[] { ",", "\r\n" });
-
-            Console.WriteLine("Press Y for to add a custom delimiter or N to skip.");
-            var prompt = Console.ReadLine();
-            if (string.Compare(prompt, "N", true) == 0 || string.Compare(prompt, "", true) == 0)
-                return delimiters;
-
-            var isAdded = false;
-            while (!isAdded)
+            var defaultDelimiters = new List<Delimiter>()
             {
-                Console.WriteLine("Please enter a single character custom delimiter: ");
-                var input = Console.ReadLine();
-                isAdded = delimiters.TryAdd(input);
-                if (!isAdded)
-                    Console.WriteLine("Invalid Character.");
-            }
+                new Delimiter(',',true),
+                new Delimiter('\n', true)
+            };
+
+            var delimiters = new Delimiters(defaultDelimiters);
+
+            AllowAddingCustomDelimiter(delimiters);
+
             return delimiters;
+        }
+
+        private static void AllowAddingCustomDelimiter(Delimiters delimiters)
+        {
+            Console.WriteLine("Press Y to add a custom delimiter or any character to skip.");
+
+            if (char.TryParse(Console.ReadLine(), out char prompt) && (prompt == 'Y' || prompt == 'y'))
+            {
+                TryGetDelimiterInput(delimiters);                
+
+                while (true)
+                {
+                    Console.WriteLine("Press M to add another delimiter or any character to skip.");
+
+                    if (char.TryParse(Console.ReadLine(), out char moreDelimiterPrompt))
+                    {
+                        if (moreDelimiterPrompt == 'M' || moreDelimiterPrompt == 'm')
+                            TryGetDelimiterInput(delimiters);
+                        else
+                            break;                        
+                    }
+                    else                        
+                    {
+                        Console.WriteLine("Invalid Input.");
+                    }
+                }
+            }            
+        }
+
+        private static void TryGetDelimiterInput(Delimiters delimiters)
+        {
+            Console.WriteLine("Enter a single character custom delimiter: ");
+
+            if (char.TryParse(Console.ReadLine(), out char input))
+            {
+                var customDelimiter = new Delimiter(input, true);
+                delimiters.Add(customDelimiter);
+            }
+            else
+            {
+                Console.WriteLine("Invalid Input.");
+                TryGetDelimiterInput(delimiters);
+            }
         }
 
         private static string GetInput()
         {
-            Console.WriteLine("Provide an input. Press S to stop. ");
+            Console.WriteLine("Provide an input. Press S to show the sum.");
             var rawInput = new StringBuilder();
             
             while (true)
