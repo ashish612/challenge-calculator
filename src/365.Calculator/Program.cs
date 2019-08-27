@@ -7,7 +7,6 @@ namespace _365.Calculator
 {
     class Program
     {
-        private static bool _canceled = false;
         static void Main(string[] args)
         {
             ShowBanner();
@@ -32,13 +31,7 @@ namespace _365.Calculator
                 Console.WriteLine(e.Message);
             }
         }
-
-        private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
-        {
-            if (e.SpecialKey == ConsoleSpecialKey.ControlC)                
-                _canceled = true;
-        }
-
+        
         private static void ShowBanner()
         {
             Console.WriteLine("Restaurant365 Code Challenge - String Calculator");
