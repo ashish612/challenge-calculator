@@ -19,5 +19,26 @@ namespace _365.Calculator.Test
             Assert.That(actualResult.Length == 4);
         }
 
+        [Test]
+        [TestCase("%")]
+        [TestCase("~")]
+        public void ShouldAllowAddingNewSingleCharacterDelimiter(string input)
+        {
+            var delimiters = new Delimiter(new string[] { });
+            var isSuccess = delimiters.TryAdd(input);
+            Assert.AreEqual(isSuccess, true);
+        }
+
+        [Test]
+        [TestCase("%%")]
+        [TestCase("-~")]
+        [TestCase("")]
+        public void ShouldNotAllowAddingEmptyOrNewMultiCharacterDelimiter(string input)
+        {
+            var delimiters = new Delimiter(new string[] { });
+            var isSuccess = delimiters.TryAdd(input);
+            Assert.AreEqual(isSuccess, false);
+        }
+        
     }
 }

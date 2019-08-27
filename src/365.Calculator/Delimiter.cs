@@ -22,6 +22,17 @@ namespace _365.Calculator
 
         public string[] Split(string input)        
             => input.Split(_delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries);
-        
+
+        public bool TryAdd(string newCharacter)
+        {
+            if (newCharacter.Length == 1)
+            {
+                _delimiters.Add(newCharacter);
+                return true;
+            }
+            return false;
+        }
+
     }
+
 }
