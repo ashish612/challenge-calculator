@@ -18,37 +18,37 @@ namespace _365.Calculator.Test
 
 
         [Test]
-        [TestCase("3,4", 7)]
-        [TestCase("10,9", 19)]
-        [TestCase("1,2,3,test,mock,4", 10)]        
-        public void ShouldReturnSumOfCommaSeparatedNumbers(string input, int expectedResult)
+        [TestCase("3,4", 7,"3+4=7")]
+        [TestCase("10,9", 19,"10+9=19")]
+        [TestCase("1,2,3,test,mock,4", 10,"1+2+3+0+0+4=10")]        
+        public void ShouldReturnCorrectSumAndFormulaForCommaSeparatedNumbers(string input, int expectedSum, string expectedFormula)
         {
             var actualResult = CalculatorBuilder
                                 .With(input)
                                 .And(delimiter)
                                 .ValidNumbers()
                                 .FilterOutNegative()
-                                .FilterGreaterThan(1000)
-                                .Sum();
+                                .FilterGreaterThan(1000);            
 
-            Assert.AreEqual(expectedResult, actualResult);
+            Assert.AreEqual(expectedSum, actualResult.Sum());
+            Assert.AreEqual(expectedFormula, actualResult.Formula());
         }
 
         [Test]
-        [TestCase("7,", 7)]
-        [TestCase("", 0)]
-        [TestCase("6,Ashish", 6)]
-        public void ShouldIgnoreTextOrEmptyValueAndSumNumbers(string input, int expectedResult)
+        [TestCase("7,", 7,"7+0=7")]
+        [TestCase("", 0,"0=0")]
+        [TestCase("6,Ashish", 6,"6+0=6")]
+        public void ShouldIgnoreTextOrEmptyValueAndReturnCorrectSumAndFormula(string input, int expectedSum, string expectedFormula)
         {
             var actualResult = CalculatorBuilder
                                 .With(input)
                                 .And(delimiter)
                                 .ValidNumbers()
                                 .FilterOutNegative()
-                                .FilterGreaterThan(1000)
-                                .Sum();
+                                .FilterGreaterThan(1000);
 
-            Assert.AreEqual(expectedResult, actualResult);
+            Assert.AreEqual(expectedSum, actualResult.Sum());
+            Assert.AreEqual(expectedFormula, actualResult.Formula());
         }
 
         [Test]
