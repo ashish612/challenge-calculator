@@ -16,20 +16,26 @@ namespace _365.Calculator
 
                 var input = GetInput();
 
-                var sum = CalculatorBuilder
+                var calculator = CalculatorBuilder
                             .With(input)
                             .And(delimiters)
                             .ValidNumbers()
                             .FilterOutNegative()
-                            .FilterGreaterThan(1000)
-                            .Sum();
+                            .FilterGreaterThan(1000);
+
+
+                var sum = calculator.Sum();
+                var formula = calculator.Formula();
 
                 Console.WriteLine(string.Format("Sum : {0}", sum));
+                Console.WriteLine(string.Format("Formula : {0}", formula));                
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
+
+            Console.Read();
         }
         
         private static void ShowBanner()

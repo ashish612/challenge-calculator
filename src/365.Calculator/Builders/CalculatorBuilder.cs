@@ -15,7 +15,7 @@ namespace _365.Calculator.Builders
         private CalculatorBuilder()
         {
         }
-        
+
         public static IDelimiter With(string input)
         {
             rawInput = input;
@@ -30,8 +30,12 @@ namespace _365.Calculator.Builders
         }
 
         public Calculator FilterGreaterThan(int number)
-        {
-            validNumbers = validNumbers.Where(n => n < number).ToList();
+        {            
+            Func<int, int> filter = x => x < number ? x : 0;
+            Func<List<int>, List<int>> greaterThanFilter = x => x.Select(filter).ToList();
+
+            validNumbers = greaterThanFilter(validNumbers);
+
             return new Calculator(validNumbers);
         }
 
@@ -40,23 +44,25 @@ namespace _365.Calculator.Builders
             var negatives = validNumbers.Where(n => n < 0);
             if (negatives.Any())
                 throw new ArgumentException(string.Format("Negatives not allowed. {0}", string.Join(",", negatives)));
+            
+            Func<int, int> filter = x => x > 0 ? x : 0;
+            Func<List<int>, List<int>> negativeNumberFilter = x => x.Select(filter).ToList();
 
-            validNumbers = validNumbers.Where(n => n > 0).ToList();
+            validNumbers = negativeNumberFilter(validNumbers);
+
             return this;
         }
 
         public IFilterNegatives ValidNumbers()
         {
             validNumbers = new List<int>();
-            foreach (var val in inputArray)
-            {
-                if (int.TryParse(val, out int validNumber))
-                    validNumbers.Add(validNumber);
-            }            
+            
+            Func<string, int> filter = x => int.TryParse(x, out int valid) ? valid : 0;
+            Func<List<string>, List<int>> validNumberFilter = x => x.Select(filter).ToList();
+
+            validNumbers = validNumberFilter(inputArray.ToList());
+
             return this;
-        }
-        
+        }        
     }
-
-
 }

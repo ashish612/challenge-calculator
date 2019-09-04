@@ -12,5 +12,7 @@ namespace _365.Calculator
         }
 
         public int Sum() =>_numbers.Sum();
+
+        public string Formula() => string.Format("{0}={1}", string.Join("+", _numbers), Sum());
     }
 }
