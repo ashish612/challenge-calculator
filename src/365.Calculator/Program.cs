@@ -1,4 +1,5 @@
 ﻿using _365.Calculator.Builders;
+using NDesk.Options;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,8 +8,14 @@ namespace _365.Calculator
 {
     class Program
     {
+        static int upperBound=1000;
+        static bool allowNegatives=false;
+        static char? altDelimiter = null;
+
         static void Main(string[] args)
         {
+            SetOptions(args);
+
             ShowBanner();
             try
             {
@@ -20,8 +27,8 @@ namespace _365.Calculator
                             .With(input)
                             .And(delimiters)
                             .ValidNumbers()
-                            .FilterOutNegative()
-                            .FilterGreaterThan(1000);
+                            .FilterNegative(allowNegatives)
+                            .FilterGreaterThan(upperBound);
 
 
                 var sum = calculator.Sum();
@@ -37,7 +44,23 @@ namespace _365.Calculator
 
             Console.Read();
         }
-        
+
+        private static void SetOptions(string[] args)
+        {
+            
+            var options = new OptionSet()
+            {
+                { "u|ubound=","Enter an upperbound",
+                    v => { int.TryParse(v,out upperBound); } },
+                {"n|neg=","Enter true to allow negative and false to filter out negatives",
+                    v =>  allowNegatives = bool.TryParse(v,out allowNegatives)},
+                {"d|altdel=","Enter an alternative character",
+                    v => altDelimiter = char.Parse(v)}
+            };
+
+            options.Parse(args);
+        }
+
         private static void ShowBanner()
         {
             Console.WriteLine("Restaurant365 Code Challenge - String Calculator");
@@ -52,6 +75,9 @@ namespace _365.Calculator
                 new Delimiter(',',true),
                 new Delimiter('\n', true)
             };
+
+            if (altDelimiter != null)
+                defaultDelimiters.Add(new Delimiter(altDelimiter.Value, true));
 
             var delimiters = new Delimiters(defaultDelimiters);
 

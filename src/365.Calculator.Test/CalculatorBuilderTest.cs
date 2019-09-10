@@ -7,7 +7,7 @@ namespace _365.Calculator.Test
 {
     public class CalculatorBuilderTest
     {
-        private Delimiters delimiter;
+        private Delimiters delimiter;        
 
         [SetUp]
         public void BeforeAdderTests()
@@ -18,17 +18,25 @@ namespace _365.Calculator.Test
 
 
         [Test]
-        [TestCase("3,4", 7,"3+4=7")]
-        [TestCase("10,9", 19,"10+9=19")]
-        [TestCase("1,2,3,test,mock,4", 10,"1+2+3+0+0+4=10")]        
-        public void ShouldReturnCorrectSumAndFormulaForCommaSeparatedNumbers(string input, int expectedSum, string expectedFormula)
+        [TestCase("3,4",false,1000, 7,"3+4=7")]
+        [TestCase("10,9,990", false,1000,1009,"10+9+990=1009")]
+        [TestCase("1,2,3,test,mock,4", false,1000,10,"1+2+3+0+0+4=10")]
+        [TestCase("3,4,-7", true, 2000, 0, "3+4+-7=0")]
+        [TestCase("10,9", true, 1050, 19, "10+9=19")]
+        [TestCase("1,2,3,test,mock,4,120,-5", true, 100, 5, "1+2+3+0+0+4+0+-5=5")]
+        public void ShouldReturnCorrectSumAndFormulaForCommaSeparatedNumbers
+            (string input, 
+            bool allowNegative,
+            int upperBound,
+            int expectedSum, 
+            string expectedFormula)
         {
             var actualResult = CalculatorBuilder
                                 .With(input)
                                 .And(delimiter)
                                 .ValidNumbers()
-                                .FilterOutNegative()
-                                .FilterGreaterThan(1000);            
+                                .FilterNegative(allowNegative)
+                                .FilterGreaterThan(upperBound);            
 
             Assert.AreEqual(expectedSum, actualResult.Sum());
             Assert.AreEqual(expectedFormula, actualResult.Formula());
@@ -44,7 +52,7 @@ namespace _365.Calculator.Test
                                 .With(input)
                                 .And(delimiter)
                                 .ValidNumbers()
-                                .FilterOutNegative()
+                                .FilterNegative(false)
                                 .FilterGreaterThan(1000);
 
             Assert.AreEqual(expectedSum, actualResult.Sum());
@@ -61,7 +69,7 @@ namespace _365.Calculator.Test
                                     .With(input)
                                     .And(delimiter)
                                     .ValidNumbers()
-                                    .FilterOutNegative()
+                                    .FilterNegative(false)
                                     .FilterGreaterThan(1000)
                                     .Sum());
         }
@@ -75,7 +83,7 @@ namespace _365.Calculator.Test
                             .With(input)
                             .And(delimiter)
                             .ValidNumbers()
-                            .FilterOutNegative()
+                            .FilterNegative(false)
                             .FilterGreaterThan(1000)
                             .Sum(),
             Throws.TypeOf<ArgumentException>().With.Message

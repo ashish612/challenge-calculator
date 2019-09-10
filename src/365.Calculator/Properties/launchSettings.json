@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "365.Calculator": {
+      "commandName": "Project",
+      "commandLineArgs": "-u=1000 -n=false"
+    }
+  }
+}
