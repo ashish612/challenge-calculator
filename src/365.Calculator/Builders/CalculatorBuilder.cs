@@ -39,17 +39,12 @@ namespace _365.Calculator.Builders
             return new Calculator(validNumbers);
         }
 
-        public IFilterNumbers FilterOutNegative()
-        {
+        public IFilterNumbers FilterNegative(bool allow)
+        {        
             var negatives = validNumbers.Where(n => n < 0);
-            if (negatives.Any())
+            if (negatives.Any() && !allow)
                 throw new ArgumentException(string.Format("Negatives not allowed. {0}", string.Join(",", negatives)));
-            
-            Func<int, int> filter = x => x > 0 ? x : 0;
-            Func<List<int>, List<int>> negativeNumberFilter = x => x.Select(filter).ToList();
-
-            validNumbers = negativeNumberFilter(validNumbers);
-
+                        
             return this;
         }
 

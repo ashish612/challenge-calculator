@@ -2,7 +2,7 @@
 {
     public interface IFilterNegatives
     {
-        IFilterNumbers FilterOutNegative();
+        IFilterNumbers FilterNegative(bool allow);
     }
 
 

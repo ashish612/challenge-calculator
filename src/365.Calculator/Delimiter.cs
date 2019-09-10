@@ -16,7 +16,7 @@ namespace _365.Calculator
 
         public string Collapse(string input)
         {
-            var r = new Regex(string.Format(@"{0}{1}", Character, "+"));
+            var r = new Regex(string.Format(@"\{0}{1}", Character, "+"));
             return r.Replace(input, Character.ToString());            
         }        
     }
