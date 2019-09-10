@@ -5,7 +5,7 @@ using System.Linq;
 namespace _365.Calculator.Builders
 {
 
-    public class CalculatorBuilder : IDelimiter, IValidNumber, IFilterNegatives, IFilterNumbers
+    public class CalculatorBuilder : IDelimiter, IValidNumber, IFilterNegatives, IFilterNumbers,IOperation
     {
         private Delimiters _delimiter;
         private static string rawInput;
@@ -29,14 +29,14 @@ namespace _365.Calculator.Builders
             return this;
         }
 
-        public Calculator FilterGreaterThan(int number)
+        public IOperation FilterGreaterThan(int number)
         {            
             Func<int, int> filter = x => x < number ? x : 0;
             Func<List<int>, List<int>> greaterThanFilter = x => x.Select(filter).ToList();
 
             validNumbers = greaterThanFilter(validNumbers);
 
-            return new Calculator(validNumbers);
+            return this;
         }
 
         public IFilterNumbers FilterNegative(bool allow)
@@ -58,6 +58,23 @@ namespace _365.Calculator.Builders
             validNumbers = validNumberFilter(inputArray.ToList());
 
             return this;
-        }        
+        }
+
+        public ICalculator For(char operation)
+        {
+            switch(operation)
+            {
+                case '+':
+                    return new AdditionCalculator(validNumbers);
+                case '-':
+                    return new SubtractionCalculator(validNumbers);
+                case '*':
+                    return new MultiplicationCalculator(validNumbers);
+                case '/':
+                    return new DivisionCalculator(validNumbers);
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
     }
 }

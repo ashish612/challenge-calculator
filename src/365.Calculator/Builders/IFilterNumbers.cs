@@ -1,8 +1,10 @@
-﻿namespace _365.Calculator
+﻿using _365.Calculator.Builders;
+
+namespace _365.Calculator
 {
     public interface IFilterNumbers
     {
-        Calculator FilterGreaterThan(int number);
+        IOperation FilterGreaterThan(int number);
     }
 
 

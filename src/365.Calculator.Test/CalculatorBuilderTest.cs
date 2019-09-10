@@ -36,9 +36,10 @@ namespace _365.Calculator.Test
                                 .And(delimiter)
                                 .ValidNumbers()
                                 .FilterNegative(allowNegative)
-                                .FilterGreaterThan(upperBound);            
+                                .FilterGreaterThan(upperBound)
+                                .For('+');            
 
-            Assert.AreEqual(expectedSum, actualResult.Sum());
+            Assert.AreEqual(expectedSum, actualResult.Calculate());
             Assert.AreEqual(expectedFormula, actualResult.Formula());
         }
 
@@ -53,9 +54,10 @@ namespace _365.Calculator.Test
                                 .And(delimiter)
                                 .ValidNumbers()
                                 .FilterNegative(false)
-                                .FilterGreaterThan(1000);
+                                .FilterGreaterThan(1000)
+                                .For('+');
 
-            Assert.AreEqual(expectedSum, actualResult.Sum());
+            Assert.AreEqual(expectedSum, actualResult.Calculate());
             Assert.AreEqual(expectedFormula, actualResult.Formula());
         }
 
@@ -71,7 +73,8 @@ namespace _365.Calculator.Test
                                     .ValidNumbers()
                                     .FilterNegative(false)
                                     .FilterGreaterThan(1000)
-                                    .Sum());
+                                    .For('+')
+                                    .Calculate());
         }
 
         [Test]
@@ -85,7 +88,8 @@ namespace _365.Calculator.Test
                             .ValidNumbers()
                             .FilterNegative(false)
                             .FilterGreaterThan(1000)
-                            .Sum(),
+                            .For('+')
+                            .Calculate(),
             Throws.TypeOf<ArgumentException>().With.Message
             .EqualTo("Negatives not allowed. -3,-1"));
         }
