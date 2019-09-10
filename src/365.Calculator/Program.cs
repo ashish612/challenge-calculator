@@ -7,34 +7,36 @@ using System.Text;
 namespace _365.Calculator
 {
     class Program
-    {
+    {        
         static int upperBound=1000;
         static bool allowNegatives=false;
         static char? altDelimiter = null;
-
+        
         static void Main(string[] args)
         {
             SetOptions(args);
-
-            ShowBanner();
+            
             try
             {
+                var operation = GetOperation();
                 var delimiters = GetDelimiters();
-
                 var input = GetInput();
+
+                
 
                 var calculator = CalculatorBuilder
                             .With(input)
                             .And(delimiters)
                             .ValidNumbers()
                             .FilterNegative(allowNegatives)
-                            .FilterGreaterThan(upperBound);
+                            .FilterGreaterThan(upperBound)
+                            .For(operation);
 
 
-                var sum = calculator.Sum();
+                var result = calculator.Calculate();
                 var formula = calculator.Formula();
 
-                Console.WriteLine(string.Format("Sum : {0}", sum));
+                Console.WriteLine(string.Format("Result : {0}", result));
                 Console.WriteLine(string.Format("Formula : {0}", formula));                
             }
             catch (Exception e)
@@ -45,15 +47,43 @@ namespace _365.Calculator
             Console.Read();
         }
 
+        private static char GetOperation()
+        {
+            var validOperations = new Dictionary<char, string> {
+                { '+', "Addition" },
+                { '-', "Subtraction" },
+                { '*', "Multiplication" },
+                { '/', "Division" }
+            };
+            Console.WriteLine("Enter the operation you want to perform: ");
+            foreach (var key in validOperations.Keys)            
+                Console.WriteLine(string.Format("{0} for {1}",key,validOperations[key]));
+                                
+            char prompt = '+';
+            while (true)
+            {
+                if (char.TryParse(Console.ReadLine(), out prompt) && validOperations.ContainsKey(prompt))
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Input.");
+                }
+            }
+
+            return prompt;
+        }
+
         private static void SetOptions(string[] args)
         {
-            
+            ShowBanner();
             var options = new OptionSet()
             {
                 { "u|ubound=","Enter an upperbound",
                     v => { int.TryParse(v,out upperBound); } },
                 {"n|neg=","Enter true to allow negative and false to filter out negatives",
-                    v =>  allowNegatives = bool.TryParse(v,out allowNegatives)},
+                    v =>  bool.TryParse(v,out allowNegatives)},
                 {"d|altdel=","Enter an alternative character",
                     v => altDelimiter = char.Parse(v)}
             };
@@ -131,7 +161,7 @@ namespace _365.Calculator
 
         private static string GetInput()
         {
-            Console.WriteLine("Provide an input. Press S to show the sum.");
+            Console.WriteLine("Provide an input. Press S to show the result.");
             var rawInput = new StringBuilder();
             
             while (true)
